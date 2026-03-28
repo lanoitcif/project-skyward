@@ -33,7 +33,7 @@ try:
     sun2.rotation_euler = (math.radians(-45), 0, math.radians(-135))
 
     # Setup render settings
-    bpy.context.scene.render.engine = 'BLENDER_EEVEE_NEXT' if hasattr(bpy.types.RenderSettings, 'engine') and 'BLENDER_EEVEE_NEXT' in [e.identifier for e in bpy.types.RenderSettings.bl_rna.properties['engine'].enum_items] else 'BLENDER_EEVEE'
+    bpy.context.scene.render.engine = 'BLENDER_EEVEE_NEXT' if hasattr(bpy.types.RenderSettings, 'engine') and 'BLENDER_EEVEE_NEXT' in (e.identifier for e in bpy.types.RenderSettings.bl_rna.properties['engine'].enum_items) else 'BLENDER_EEVEE'
     bpy.context.scene.render.resolution_x = 1280
     bpy.context.scene.render.resolution_y = 720
     
