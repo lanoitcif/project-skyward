@@ -3,3 +3,6 @@ image_files/
 __pycache__/
 *.blend1
 *.log
+
+venv/
+*.zip
