@@ -25,9 +25,9 @@ grounds = bpy.context.selected_objects[0]
 grounds.data.materials.append(mat_ground)
 
 # Exact Tree Coordinates 
-T1 = (1.71, 8.58)
-T2 = (3.72, 8.48)
-T3 = (2.76, 5.36)
+T1 = (-2.44, 0.00)
+T2 = (1.29, 0.06)
+T3 = (2.44, 0.00)
 
 # Attainable, Safe Elevation for a DIY Carpenter (2 Meters / ~6.5 ft off ground)
 Z_LEVEL = 2.0 

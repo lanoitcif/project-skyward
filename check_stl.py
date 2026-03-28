@@ -9,12 +9,9 @@ obj = bpy.context.selected_objects[0]
 dims = obj.dimensions
 print(f'Dimensions: X={dims.x:.2f}, Y={dims.y:.2f}, Z={dims.z:.2f}')
 
-if dims.y > dims.z and dims.y > dims.x:
-    print('Y appears to be the vertical axis. Rotating to standard Z-up.')
+if dims.y < dims.z and dims.y < dims.x:
+    print('Y appears to be the vertical axis because it is much smaller (ground scan). Rotating to standard Z-up.')
     obj.rotation_euler[0] = math.radians(90)
-elif dims.x > dims.y and dims.x > dims.z:
-    print('X appears to be the vertical axis. Rotating to standard Z-up.')
-    obj.rotation_euler[1] = math.radians(90)
 else:
     print('Z appears to be the vertical axis. No rotation needed.')
 
