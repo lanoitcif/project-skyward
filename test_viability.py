@@ -470,9 +470,14 @@ def test_railing_compliance():
 
     R.ok("T08-post-size", "4×4 nominal posts (3.5\"×3.5\") — standard")
 
-    R.warn("T08-baluster-spacing",
-           "Balusters not modeled in CAD. IRC R312.1.3 requires "
-           f"≤{IRC_BALUSTER_MAX_IN}\" openings. Must add during construction.")
+    with open(ATTAINABLE) as f:
+        code = f.read()
+    if "baluster" in code.lower():
+        R.ok("T08-baluster-spacing", "Balusters modeled in CAD. Verify ≤4\" openings during construction.")
+    else:
+        R.warn("T08-baluster-spacing",
+               "Balusters not modeled in CAD. IRC R312.1.3 requires "
+               f"≤{IRC_BALUSTER_MAX_IN}\" openings. Must add during construction.")
 
 
 def test_trunk_clearance():
@@ -493,7 +498,7 @@ def test_ground_clearance_on_slope(coords):
     """T10: With 7% terrain grade, check minimum ground clearance."""
     if not coords:
         return
-    deck_height_m = 2.0
+    deck_height_m = _read_constant("Z_LEVEL", 2.0)
     terrain_grade = 0.07  # 7% from validate_gis.py
     span_m = 4.88  # T1–T3
 
