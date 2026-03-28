@@ -147,7 +147,7 @@ if bg:
     bg.inputs[0].default_value = (0.2, 0.3, 0.4, 1)
 bpy.context.scene.world = world
 
-bpy.context.scene.render.engine = 'BLENDER_EEVEE_NEXT' if hasattr(bpy.types.RenderSettings, 'engine') and 'BLENDER_EEVEE_NEXT' in [e.identifier for e in bpy.types.RenderSettings.bl_rna.properties['engine'].enum_items] else 'BLENDER_EEVEE'
+bpy.context.scene.render.engine = 'BLENDER_EEVEE_NEXT' if hasattr(bpy.types.RenderSettings, 'engine') and 'BLENDER_EEVEE_NEXT' in (e.identifier for e in bpy.types.RenderSettings.bl_rna.properties['engine'].enum_items) else 'BLENDER_EEVEE'
 bpy.context.scene.render.resolution_x = 1920
 bpy.context.scene.render.resolution_y = 1080
 
