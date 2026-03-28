@@ -31,7 +31,7 @@ T2 = (1.29, 0.06)
 T3 = (2.44, 0.00)
 
 # Attainable, Safe Elevation for a DIY Carpenter (2 Meters / ~6.5 ft off ground)
-Z_LEVEL = 2.0
+Z_LEVEL = 2.2  # Raised to 2.2m to provide >6ft ground clearance underneath on a slope
 
 inch = 0.0254
 dim_2x8_w = 1.5 * inch
@@ -43,6 +43,8 @@ BRIDGE_WIDTH = 0.9144            # 36.0" — meets IRC R311.6 egress minimum
 TRUNK_CUTOUT = 0.35              # meters — 13.8" clearance for tree growth
 HUMAN_HEIGHT_M = 1.75            # realistic adult height for scale figure
 
+
+# Hardware checks: We will need hurricane ties, lag bolts, and deck screws for assembly.
 
 def build_simple_platform(name, cx, cy, radius=1.0):
     cz = Z_LEVEL
@@ -110,11 +112,31 @@ def build_simple_platform(name, cx, cy, radius=1.0):
         rail = bpy.context.active_object
         rail.scale = (yoke_len, 1.5*inch, 3.5*inch)
         rail.data.materials.append(mat_frame)
+
+        # balusters
+        num_balusters = int(yoke_len / (4.5 * inch))
+        for j in range(num_balusters):
+            bx = cx - yoke_len/2 + (j + 0.5) * (yoke_len / num_balusters)
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(bx, cy + y_side*(yoke_len/2 - 2*inch), deck_z + RAILING_HEIGHT/2))
+            baluster = bpy.context.active_object
+            baluster.scale = (1.5*inch, 1.5*inch, RAILING_HEIGHT)
+            baluster.data.materials.append(mat_frame)
+
     for x_side in [-1, 1]:
         bpy.ops.mesh.primitive_cube_add(size=1, location=(cx + x_side*(yoke_len/2 - 2*inch), cy, top_z))
         rail = bpy.context.active_object
         rail.scale = (1.5*inch, yoke_len, 3.5*inch)
         rail.data.materials.append(mat_frame)
+
+        # balusters
+        num_balusters = int(yoke_len / (4.5 * inch))
+        for j in range(num_balusters):
+            by = cy - yoke_len/2 + (j + 0.5) * (yoke_len / num_balusters)
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(cx + x_side*(yoke_len/2 - 2*inch), by, deck_z + RAILING_HEIGHT/2))
+            baluster = bpy.context.active_object
+            baluster.scale = (1.5*inch, 1.5*inch, RAILING_HEIGHT)
+            baluster.data.materials.append(mat_frame)
+
     return deck_z
 
 
@@ -209,11 +231,31 @@ def build_shared_platform(name, cx2, cy2, cx3, cy3):
         rail = bpy.context.active_object
         rail.scale = (plat_w, 1.5*inch, 3.5*inch)
         rail.data.materials.append(mat_frame)
+
+        # balusters
+        num_balusters = int(plat_w / (4.5 * inch))
+        for j in range(num_balusters):
+            bx = x_min + (j + 0.5) * (plat_w / num_balusters)
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(bx, y_center + y_side*(y_half - 2*inch), deck_z + RAILING_HEIGHT/2))
+            baluster = bpy.context.active_object
+            baluster.scale = (1.5*inch, 1.5*inch, RAILING_HEIGHT)
+            baluster.data.materials.append(mat_frame)
+
     for x_side in [(x_min + 2*inch), (x_max - 2*inch)]:
         bpy.ops.mesh.primitive_cube_add(size=1, location=(x_side, y_center, top_z))
         rail = bpy.context.active_object
         rail.scale = (1.5*inch, plat_h, 3.5*inch)
         rail.data.materials.append(mat_frame)
+
+        # balusters
+        num_balusters = int(plat_h / (4.5 * inch))
+        for j in range(num_balusters):
+            by = y_center - y_half + (j + 0.5) * (plat_h / num_balusters)
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(x_side, by, deck_z + RAILING_HEIGHT/2))
+            baluster = bpy.context.active_object
+            baluster.scale = (1.5*inch, 1.5*inch, RAILING_HEIGHT)
+            baluster.data.materials.append(mat_frame)
+
     return deck_z
 
 
@@ -262,6 +304,20 @@ def build_simple_wood_bridge(x1, y1, x2, y2):
         rail.location.x += math.cos(yaw) * offset
         rail.location.y += math.sin(yaw) * offset
         rail.data.materials.append(mat_frame)
+
+        # balusters
+        num_balusters = int(dist / (4.5 * inch))
+        for j in range(num_balusters):
+            t = (j + 0.5) / num_balusters
+            bx = x1 + dx * t
+            by = y1 + dy * t
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(bx, by, deck_z + RAILING_HEIGHT/2))
+            baluster = bpy.context.active_object
+            baluster.scale = (1.5*inch, 1.5*inch, RAILING_HEIGHT)
+            baluster.rotation_euler = (0, 0, yaw)
+            baluster.location.x += math.cos(yaw) * offset
+            baluster.location.y += math.sin(yaw) * offset
+            baluster.data.materials.append(mat_frame)
 
 
 def build_ladder(cx, cy, deck_z):
