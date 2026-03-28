@@ -30,9 +30,9 @@ grounds = bpy.context.selected_objects[0]
 grounds.data.materials.append(mat_ground)
 
 # Exact Tree Coordinates discovered mathematically
-T1 = (1.71, 8.58)
-T2 = (3.72, 8.48)
-T3 = (2.76, 5.36)
+T1 = (-2.44, 0.00)
+T2 = (1.29, 0.06)
+T3 = (2.44, 0.00)
 
 # Extrapolate trees vertically to replace missing canopy data
 mat_trunk = create_mat("Pine_Trunk", (0.1, 0.05, 0.02, 1))
