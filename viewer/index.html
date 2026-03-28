@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Skyward: Treehouse Editor</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Load Three.js as ES module -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="sidebar">
+        <h1>Project Skyward</h1>
+        <p>Use the controls below to edit the preliminary treehouse deck footprint based on the STL site constraints.</p>
+        
+        <div class="control-group">
+            <label>Deck Width (ft): <span id="w-val">10</span></label>
+            <input type="range" id="deck-width" min="4" max="25" step="0.5" value="10">
+        </div>
+        
+        <div class="control-group">
+            <label>Deck Depth (ft): <span id="d-val">10</span></label>
+            <input type="range" id="deck-depth" min="4" max="25" step="0.5" value="10">
+        </div>
+        
+        <div class="control-group">
+            <label>Elevation (Y-Axis): <span id="h-val">8</span></label>
+            <input type="range" id="deck-height" min="-5" max="20" step="0.5" value="8">
+        </div>
+
+        <div class="control-group">
+            <label>Rotation (deg): <span id="r-val">0</span></label>
+            <input type="range" id="deck-rot" min="0" max="360" step="1" value="0">
+        </div>
+
+        <hr>
+        <h3>Reference</h3>
+        <p>The ground STL model (from lidar) is centered at origin. Maximize the deck spacing without clipping into the assumed tree trunk at the center.</p>
+        <a href="../index.html" target="_blank">View Site Image Gallery</a>
+    </div>
+    <div id="canvas-container"></div>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
