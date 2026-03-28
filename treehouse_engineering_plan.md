@@ -1,31 +1,66 @@
-# Project Skyward - Engineering & CAD BoM
+# Project Skyward — Engineering & CAD Bill of Materials
 
-## 1. Single Tree Structural Approach (The "Yoke" Method)
-Building a 10x10ft foundation on a single, 30" diameter Eastern White Pine requires a heavy-duty, entirely tree-supported foundation. To accommodate tree growth and sway, hybrid ground-posts are **NOT** recommended for a high deck; differential movement will pull the frame apart in high winds.
-**Solution:** A 4-point single-tree "Yoke" (or square Tribeam) supported by heavy knee braces resting entirely on the trunk.
+## 1. Multi-Tree Structural Approach (Floating Yoke Method)
+The design supports three independent platforms—one per tree—connected by rigid wooden gangways. Each tree bears its own yoke frame, entirely tree-supported with no ground posts. Slotted dynamic brackets on the TABs allow each tree to sway independently without transferring stress to adjacent platforms.
 
-## 2. Bill of Materials (BoM)
-### Hardware (The Structural "Treehouse Hardware")
-*   **4x 1.25" TABs (Treehouse Attachment Bolts)** with 3" diameter bosses. These support the main vertical load.
-*   **4x 1" Lag Bolts** (12" length) for the lower knee-brace connections.
-*   **4x Slotted Dynamic Brackets**. These allow the 2x10 yoke beams to sit on the TAB collars while sliding slightly as the tree bends.
-*   **200x 3" star-drive deck screws**.
-*   **Metal Hurricane Ties** (Simpson Strong-Tie) for joist connections.
+**Tree Coordinates (normalized, meters):**
+| Tree | X | Y | Notes |
+|------|-------|------|-------|
+| T1 | −2.44 | 0.00 | West anchor |
+| T2 | 1.29 | 0.06 | Middle (60 mm off-axis) |
+| T3 | 2.44 | 0.00 | East anchor |
 
-### Lumber (Pressure Treated for Frame, Cedar for Decking)
-*   **Yoke Beams (The core box):** 8x `2x10x8'` (Doubled up face-to-face to create four massive 3"x9.25" perimeter beams).
-*   **Knee Braces (The supports):** 4x `4x6x8'` Timbers.
-*   **Floor Joists:** 13x `2x8x10'` boards (set 16" on center).
-*   **Decking:** 40x `5/4"x6"x10'` solid cedar planks.
+Outer span (T1–T3): **16 ft (4.88 m)**. Terrain grade ≈ 7%.
+
+## 2. Bill of Materials — Attainable Design (2.0 m / 6.5 ft elevation)
+### Hardware
+| Qty | Item | Spec | Purpose |
+|-----|------|------|---------|
+| 6 | TABs (Treehouse Attachment Bolts) | 1.25″ shaft, 3″ boss | 2 per tree — primary vertical load |
+| 6 | Slotted Dynamic Brackets | Simpson or equivalent | Allow yoke beams to slide on TAB collars |
+| 6 | Lag Bolts | 1″ × 12″ | Knee-brace connections (optional safety tie) |
+| ~400 | Star-Drive Deck Screws | 3″ | Joist & decking fasteners |
+| ~36 | Hurricane Ties | Simpson Strong-Tie | Joist-to-beam connections |
+
+### Lumber (Pressure-Treated frame / Cedar deck)
+| Qty | Size | Length | Purpose |
+|-----|------|--------|---------|
+| 12 | 2×10 | 8′ | Yoke beams (doubled, 2 yokes × 3 trees) |
+| ~18 | 2×8 | varies | Floor joists at 16″ OC (~6 per platform) |
+| ~80 | 5/4″ × 5.5″ Cedar | varies | Decking boards (0.25″ gaps, split around trunks) |
+| ~24 | 4×4 | 3′ | Railing posts (36″ height) |
+| ~24 | 2×4 Cedar | varies | Top rails and balusters |
+
+### Gangway Lumber (2 rigid walkways)
+| Qty | Size | Length | Purpose |
+|-----|------|--------|---------|
+| 4 | 2×10 | ~12′ | Walkway stringers (doubled, T1↔T2 and T2↔T3) |
+| ~16 | 2×8 | 4′ | Cross-joists at 16″ OC |
+| ~20 | 5/4″ × 5.5″ Cedar | 4′ | Walkway decking |
 
 ## 3. Order of Operations
-1. **Leveling & Surveying**: Use the existing ropes visible at the 8ft mark to demarcate the level line for the main TABs.
-2. **Drill & Mount Lower Hardware**: Install the 4 lower lag bolts at the 3.5ft / 4ft height mark.
-3. **Drill & Mount Upper TABs**: Install the 4 main heavy TABs directly into the trunk at the 8ft mark.
-4. **Mount Knee Braces**: Hoist the heavy 4x6 timbers and secure them from the lower lag bolts angling 45 degrees up toward the upper TABs.
-5. **Construct the Yoke**: Mount the dynamic structural brackets onto the TABs. Lift the doubled 2x10 beams into place and secure them to the brackets and to the top notches of the knee braces.
-6. **Set Joists**: Lay the 2x8 joists across the 8x8 yoke beams. *CRITICALLY: Leave a physical 3-inch gap around the trunk so the joists never pinch the bark.*
-7. **Install Decking**: Fasten the cedar boards across the joists, scribing a perfect circle around the tree trunk (maintaining the 3-inch growth gap).
+1. **Leveling & Survey**: Confirm the 16 ft span on-site (see `validate_gis.py` for independent GIS cross-validation). Mark the 2.0 m elevation line on each trunk.
+2. **Drill & Mount TABs**: Install 2 TABs per tree at the 2.0 m mark, spaced 0.5 m apart vertically. Use dynamic brackets.
+3. **Construct Yoke Frames**: Mount doubled 2×10 beams onto the dynamic brackets at each tree.
+4. **Set Joists**: Lay 2×8 joists across the yoke beams at 16″ OC. *Leave a 0.35 m growth gap around each trunk.*
+5. **Install Decking**: Fasten 5/4″ cedar planks across joists, scribing cutouts around trunks.
+6. **Build Gangways**: Erect the rigid walkway stringers between T1↔T2 and T2↔T3. Cross-joist and deck.
+7. **Install Railings**: 36″ child-safe railings on all platforms and gangways.
+8. **Inspect**: Full structural inspection before use.
 
-## 4. Blender CAD Script Implementation
-A sophisticated Python `bpy` script has been written (`build_treehouse.py`) to algorithmically scaffold these exact 3D components into a Blender environment overlaid precisely onto the LIDAR-scanned `grounds.stl`, producing a unified CAD file: `Project_Skyward.blend`.
+## 4. Professional Variant (Multi-Level)
+The `pro_build.py` script generates a multi-level variant with:
+- T1 at 5.0 m, T2 at 7.0 m, T3 at 9.0 m
+- Larger yoke radius (1.6 m), ~9 joists per platform
+- 39″ railings, cable suspension bridges between platforms
+- Output: `Professional_Skyward_Corrected.blend`
+
+## 5. Blender CAD Script Reference
+| Script | Output | Design |
+|--------|--------|--------|
+| `attainable_build.py` | `Attainable_Skyward.blend` | Recommended: safe 6.5 ft, rigid spans |
+| `pro_build.py` | `Professional_Skyward_Corrected.blend` | Multi-level (16–30 ft), cable bridges |
+| `build_skywalk.py` | `Skyward_MultiTree.blend` | Conceptual demo with suspension bridges |
+| `build_treehouse.py` | `Project_Skyward.blend` | Legacy single-tree design (superseded) |
+
+All CAD scripts import the corrected LIDAR mesh from `stl_files/grounds_clean.stl` and generate exact dimensional lumber locked to the scanned tree positions.
