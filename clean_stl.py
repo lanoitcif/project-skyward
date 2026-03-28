@@ -1,5 +1,6 @@
 import bpy
 import bmesh
+import itertools
 import math
 import mathutils
 
@@ -46,16 +47,24 @@ for p in pts:
 
 clusters.sort(key=lambda c: len(c['pts']), reverse=True)
 
-# Find the three major tree trunks forming a linear row
-import itertools
+# Find the three major tree trunks forming a linear row.
+# Tunable thresholds for tree identification:
+MAX_CANDIDATE_CLUSTERS = 15          # top N densest clusters to evaluate
+TREE_MIN_POINT_COUNT = 500           # minimum points at Z-slice for a valid trunk
+COLLINEARITY_TOLERANCE = 0.5         # max cross-product magnitude (m²) for near-linear alignment
+TARGET_SPAN_FT = 16                  # project design span between outer trees (feet)
+TARGET_SPAN_M = TARGET_SPAN_FT * 0.3048  # 4.8768 meters
+SPAN_SEARCH_MARGIN_M = 1.0          # ± tolerance when searching for the row in raw scan units
+
 target_group = None
 target_dist = 0
 
-for comb in itertools.combinations(range(min(15, len(clusters))), 3):
+for comb in itertools.combinations(range(min(MAX_CANDIDATE_CLUSTERS, len(clusters))), 3):
     c1, c2, c3 = clusters[comb[0]], clusters[comb[1]], clusters[comb[2]]
 
-    # Require massive trees
-    if len(c1['pts']) < 500 or len(c2['pts']) < 500 or len(c3['pts']) < 500:
+    if (len(c1['pts']) < TREE_MIN_POINT_COUNT or
+            len(c2['pts']) < TREE_MIN_POINT_COUNT or
+            len(c3['pts']) < TREE_MIN_POINT_COUNT):
         continue
 
     d12 = math.hypot(c1['x']-c2['x'], c1['y']-c2['y'])
@@ -64,18 +73,17 @@ for comb in itertools.combinations(range(min(15, len(clusters))), 3):
 
     max_d = max(d12, d23, d13)
 
-    # Collinearity check using cross product
+    # Collinearity check: cross product of vectors (c1→c2) × (c1→c3)
     cp = (c2['x']-c1['x'])*(c3['y']-c1['y']) - (c2['y']-c1['y'])*(c3['x']-c1['x'])
 
-    # The linear row should be spanning ~5.21 meters
-    if abs(cp) < 0.5 and 4.0 < max_d < 6.0:
+    if abs(cp) < COLLINEARITY_TOLERANCE and 4.0 < max_d < 6.0:
         target_group = (comb[0], comb[1], comb[2])
         target_dist = max_d
         break
 
 if not target_group:
     print("ERROR: Could not identify a linear row of three massive trees.")
-    exit(1)
+    raise SystemExit(1)
 
 # Sort the 3 chosen trees linearly along X
 t_group = [clusters[target_group[0]], clusters[target_group[1]], clusters[target_group[2]]]
@@ -105,8 +113,8 @@ obj.rotation_euler[2] = -angle
 bpy.context.view_layer.update()
 bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
 
-# 3. Scale so outer trees are exactly 16 feet (4.8768 meters) apart
-scale_factor = 4.8768 / target_dist
+# 3. Scale so outer trees are exactly 16 feet apart
+scale_factor = TARGET_SPAN_M / target_dist
 obj.scale = (scale_factor, scale_factor, scale_factor)
 bpy.context.view_layer.update()
 bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
@@ -128,6 +136,8 @@ new_t1_x, new_t1_y = transform_pt(t1_x, t1_y)
 new_t2_x, new_t2_y = transform_pt(t2_x, t2_y)
 
 print("=== CRITICAL TREE COORDINATES ===")
+print(f"Raw STL outer-tree span before normalization: {target_dist:.3f} m")
+print(f"Scale factor applied: {scale_factor:.4f} (target {TARGET_SPAN_M:.4f} m = {TARGET_SPAN_FT} ft)")
 print(f"TREE_1: X={new_t0_x:.2f}, Y={new_t0_y:.2f}, PTS={len(t0['pts'])}")
 print(f"TREE_2: X={new_t1_x:.2f}, Y={new_t1_y:.2f}, PTS={len(t1['pts'])}")
 print(f"TREE_3: X={new_t2_x:.2f}, Y={new_t2_y:.2f}, PTS={len(t2['pts'])}")

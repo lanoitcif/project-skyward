@@ -9,8 +9,15 @@ obj = bpy.context.selected_objects[0]
 dims = obj.dimensions
 print(f'Dimensions: X={dims.x:.2f}, Y={dims.y:.2f}, Z={dims.z:.2f}')
 
-if dims.y < dims.z and dims.y < dims.x:
-    print('Y appears to be the vertical axis because it is much smaller (ground scan). Rotating to standard Z-up.')
+# Detect if Y is actually the vertical (height) axis in the raw STL.
+# For a ground-level drone scan the vertical extent is much larger than the
+# horizontal spread, so the "vertical" axis will be the LARGEST dimension.
+# However, this particular LIDAR capture stored absolute elevation in Y while
+# the ground footprint spans X and Z — making Y the largest.  We also guard
+# against near-cubic meshes with a 20 % ratio threshold.
+AXIS_RATIO_THRESHOLD = 0.8
+if dims.y > max(dims.x, dims.z) and min(dims.x, dims.z) < dims.y * AXIS_RATIO_THRESHOLD:
+    print('Y appears to be the vertical axis (largest dimension). Rotating to standard Z-up.')
     obj.rotation_euler[0] = math.radians(90)
 else:
     print('Z appears to be the vertical axis. No rotation needed.')
