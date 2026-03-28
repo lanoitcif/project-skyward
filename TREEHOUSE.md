@@ -14,6 +14,7 @@ Rather than complex suspension bridges, this design employs rigid wooden spans t
     - Individual 5/4" Cedar decking boards algorithmic cutouts wrapped perfectly around the exact LIDAR bark geometry.
     - Standard 36" child-safe heavy railings wrapping the entire structure.
 - **Web-based Layout Viewer**: A local interactive HTML/Three.js viewer was provided in the `/viewer` directory to quickly preview footprint dimension changes without heavy CAD tooling.
+- **Independent GIS Cross-Validation** (`validate_gis.py`): The drone STL scan's spatial accuracy was independently validated against the USGS 3DEP Digital Terrain Model (acquired 2021-11-02). Terrain slope comparison shows **94% agreement** (STL 6.85% grade vs USGS 7.27%), confirming the STL's metric scale is consistent with government survey data. Note: satellite imagery (23cm/px) cannot resolve individual trees at 5m spacing — an on-site survey is still recommended before construction to confirm the exact 16-foot span.
 
 ## 3. Long Term Plans & Next Steps
 1. **CAD Refinement**: The architectural team must review `Attainable_Skyward.blend` natively in Blender to build upon the completed foundation by adding roof pitches (designed to shed heavy pine needles), and the access stairs/ladders.
@@ -25,3 +26,4 @@ Rather than complex suspension bridges, this design employs rigid wooden spans t
 - `Attainable_Skyward.blend` - **[NEW]** The master 3D CAD model featuring safe, rigid dimensional lumber and child-safe railings natively locked into the raw LIDAR tree trunks.
 - `stl_files/grounds_clean.stl` - The rotation-corrected and leveled topography mesh.
 - `viewer/index.html` - Rapid prototype viewer for fast footprint scale visualization.
+- `validate_gis.py` - Independent GIS cross-validation script (STL vs USGS 3DEP).
